@@ -1,0 +1,89 @@
+{
+  "_about": "Settings for kraken_display.py. After editing: systemctl restart kraken-display",
+  "modes": {
+    "_help": "Picked by CPU load (smoothed, updated every 5 s). At start-up the first 5 s reading sets the mode directly. Up: the load must stay in a higher mode for up_after_min, then it jumps there. Down: it steps through every mode in between, one at a time, spread evenly over down_after_min. load_to: upper load % of the mode. color + lights: hub/RAM light color and brightness %. screen: pump screen brightness %. fan_min / pump_min: minimum duty % for all fans / the pump in this mode. Add, remove or rename modes freely; they're sorted by load_to.",
+    "up_after_min": 1,
+    "down_after_min": 3,
+    "list": [
+      {"name": "idle", "load_to": 17, "color": "#ffffff", "lights": 30, "screen": 40, "fan_min": 0, "pump_min": 0},
+      {"name": "light", "load_to": 33, "color": "#ffc8c8", "lights": 44, "screen": 52, "fan_min": 25, "pump_min": 25},
+      {"name": "active", "load_to": 50, "color": "#ff8c8c", "lights": 58, "screen": 64, "fan_min": 40, "pump_min": 40},
+      {"name": "busy", "load_to": 67, "color": "#ff4d4d", "lights": 72, "screen": 76, "fan_min": 55, "pump_min": 55},
+      {"name": "heavy", "load_to": 83, "color": "#e00000", "lights": 86, "screen": 88, "fan_min": 70, "pump_min": 70},
+      {"name": "max", "load_to": 100, "color": "#8b0000", "lights": 100, "screen": 100, "fan_min": 85, "pump_min": 100}
+    ]
+  },
+  "quiet": {
+    "_help": "After after_min minutes below load_below % CPU load, all fans go to fan_duty %, the pump to pump_duty %, lights/screen dim, as long as the mode is allowed_up_to or lower; from a higher mode it waits until the mode has stepped down (modes.down_after_min), so the fans cool things off first. at_start: go quiet right away if the first 5 s after starting are idle. Load above load_below for wake_after_min ends it; liquid >= max_liquid or CPU >= max_cpu ends it immediately.",
+    "after_min": 1,
+    "allowed_up_to": "active",
+    "load_below": 10,
+    "at_start": true,
+    "fan_duty": 10,
+    "pump_duty": 80,
+    "wake_after_min": 1,
+    "max_liquid": 38,
+    "max_cpu": 60
+  },
+  "screen": {
+    "_help": "rotate: 0/90/180/270. interval: seconds between sensor/fan updates. quiet_brightness: screen % in quiet mode. texts: what the bottom line cycles through, every text_seconds: fans (radiator fan %), next (coming change: next mode, quiet, waking up), pump (pump %), time (clock). Empty ones are skipped.",
+    "rotate": 0,
+    "interval": 5,
+    "quiet_brightness": 20,
+    "texts": [
+      "fans",
+      "next"
+    ],
+    "text_seconds": 3
+  },
+  "lights": {
+    "_help": "mode: auto (follow the modes) or off. quiet_brightness: % in quiet mode.",
+    "mode": "auto",
+    "quiet_brightness": 20
+  },
+  "dark": {
+    "_help": "Lights and pump screen only from the mode show_from up; below it all lights are off and the screen is black (fans keep working). Modes go up only after modes.up_after_min, so short bursts stay dark. show_from: the first mode's name = always on.",
+    "show_from": "heavy"
+  },
+  "fans": {
+    "_help": "Curves are [x, duty %] points. radiator/case/pump: x = liquid C; they stay at their minimum up to 34 C and ramp up above it. temp_boost: x = smoothed CPU C. Each fan and the pump run at the highest of their curve, the temp boost and the mode's fan_min/pump_min. ramp_up/ramp_down: max % change per update. NZXT advises against running the pump low for long periods, so it stays at 80 % or more; the Kraken itself won't go below 20 %.",
+    "names": {
+      "kraken": "radiator pull fans 1-2 (Kraken)",
+      "fan1": "radiator push fans 1-2 (hub fan1)",
+      "fan2": "rear case fan (hub fan2)",
+      "fan3": "top case fan (hub fan3)"
+    },
+    "radiator_curve": [
+      [34, 20],
+      [36, 35],
+      [38, 55],
+      [40, 75],
+      [42, 100]
+    ],
+    "case_curve": [
+      [34, 20],
+      [37, 40],
+      [40, 60],
+      [43, 80]
+    ],
+    "pump_curve": [
+      [34, 80],
+      [38, 90],
+      [40, 100]
+    ],
+    "temp_boost": [
+      [65, 0],
+      [75, 50],
+      [85, 80],
+      [92, 100]
+    ],
+    "temp_smoothing": 0.35,
+    "load_smoothing": 0.4,
+    "ramp_up": 20,
+    "ramp_down": 4
+  },
+  "openrgb": {
+    "host": "127.0.0.1",
+    "port": 6742
+  }
+}

@@ -1,0 +1,12 @@
+# Optional: only needed for RAM (or other) lights through OpenRGB.
+[Unit]
+Description=OpenRGB SDK server (local only, for RAM lights)
+After=systemd-modules-load.service
+
+[Service]
+ExecStart=/usr/bin/openrgb --server --server-host 127.0.0.1
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

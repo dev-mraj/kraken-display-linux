@@ -1,0 +1,23 @@
+[Unit]
+Description=Kraken Z LCD (CPU + liquid temp) and fan/pump curves
+After=multi-user.target
+
+[Service]
+ExecStart=/usr/bin/python3 /opt/kraken/kraken_display.py
+# Settings file (optional, this is the default):
+#Environment=KRAKEN_DISPLAY_CONFIG=/etc/kraken-display.json
+Restart=always
+RestartSec=10
+# /run/kraken-display: screen image + status file (watch -n2 cat /run/kraken-display/status.txt)
+RuntimeDirectory=kraken-display
+RuntimeDirectoryMode=0755
+# Hardening: needs only USB HID devices, /sys, /proc and its runtime directory
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=full
+ProtectHome=yes
+ProtectControlGroups=yes
+RestrictSUIDSGID=yes
+
+[Install]
+WantedBy=multi-user.target
